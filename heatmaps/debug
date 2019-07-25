@@ -1,0 +1,23 @@
+Faulty in raw data: x=7.81  y=5.30 z=-22.35 map=ns2_tram
+Translates to pixels (rotated & mirrored): x=80.8, y=368.8
+OUTSIDE of vent
+
+
+Hrm, there's something a bit odd though - as if the `scale` was a tad too high.
+Starting with the following entry from NS2+'s killfeed: `roundDate            victimPosition    victimLocation  mapName     minimapExtents                                                                         roundId
+-------------------  ----------------  --------------  ----------  -------------------------------------------------------------------------------------  ----------
+2019-05-13 02:01:52  7.81 5.30 -22.35                  ns2_tram    {"origin":"-16.647284 -8.534377 51.335014","scale":"350.000000 85.782593 350.000000"}  56146`
+
+So:
+```
+origin_x = -16.647284, origin_z = 51.335014, scale = 350
+x = 7.81, z = -22.35
+```
+
+Scaling to say a 1024x1024 minimap:
+```
+x_map = round((z - origin_z) / (scale / 2) * 1024 + 512) = 81
+y_map = round(-(x - origin_x) / (scale / 2) * 1024 + 512) = 369
+```
+
+However, pixel 81/369 in the 1024x1024 minimap I pulled from the game is
